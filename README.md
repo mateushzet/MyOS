@@ -8,18 +8,16 @@ Bootloader: multiboot2
 
 Technologies used for emulating:
 
--Docker
+- Docker
 
--Qemu
+- Qemu
 
 
 Technologies installed in Docker container:
 
--nasm
-
--grub
-
--gcc cross compiler - "gcc-cross-x86_64-elf"
+- nasm
+- grub
+- gcc cross compiler - "gcc-cross-x86_64-elf"
 
 
 Process of emulating and launching os:
