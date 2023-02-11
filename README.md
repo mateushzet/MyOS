@@ -1,16 +1,24 @@
 # MyOS
-My 64-bit Operating System Kernel
-Architecture: x86
+My 64-bit Operating System Kernel,
+
+Architecture: x86,
+
 Bootloader: multiboot2
+
 
 Technologies used for emulating:
 -Docker
 -Qemu
 
+
 Technologies installed in Docker container:
+
 -nasm
+
 -grub
+
 -gcc cross compiler - "gcc-cross-x86_64-elf"
+
 
 Process of emulating and launching os:
 1) Building containter image with docker - "docker build buildenv -t myos-buildenv"
