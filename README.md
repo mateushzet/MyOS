@@ -17,6 +17,7 @@ Technologies installed in Docker container:
 
 - nasm
 - grub
+- xorriso
 - gcc cross compiler - "gcc-cross-x86_64-elf"
 
 
