@@ -7,7 +7,9 @@ Bootloader: multiboot2
 
 
 Technologies used for emulating:
+
 -Docker
+
 -Qemu
 
 
