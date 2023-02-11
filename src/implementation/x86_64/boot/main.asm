@@ -11,6 +11,9 @@ start:
     call check_cpuid ; check cpu id instuction that provides various cpu information
     call check_long_mode  ; use cpu id to check for long mode support
 
+    ; we need paging to enter 64-bit mode
+    call setup_page_tables
+    call enable_paging
 
     mov dword[0xb8000], 0x2f4b2f4f  ; writing into video memory cpu will display this on the screen
     hlt ; halt the cpu
@@ -62,6 +65,64 @@ check_long_mode:
     mov al, "L"
     jmp error
 
+; identity maping, physical address are map to the exact same virtual address
+; becouse paging will be activated automatically as soon as we enable long mode
+; then the cpu will read the following instructions to execute and the address of this instruction
+; will be based on a physical address it already has from before paging was enabled
+; since the cpu will now treat this as a virtual address we will map a chunk of these virtual addresses
+; to the same physical addresses so our instructions will continue executing fluidly
+setup_page_tables:
+    mov eax, page_table_l3  ; getting address of page 3 table
+    ; becouse of align 4096, first 12 bits of every entry is always going to be zero
+    ; and the cpu uses these bits to store flags instead
+    or eax, 0b11 ; enabling present and writable flags
+    mov [page_table_l4], eax    ; moving that address with setted flags into first entry of L4 table
+
+    mov eax, page_table_l2
+    or eax, 0b11
+    mov [page_table_l3], eax
+
+; we dont need to create Level 1 table becouse of enableing the huge page flag on any entry in the level 2 table
+; and this allow us to point directly to physical memmory and allocate a huge page that is two megabytes in size
+; the spare nine bits in the virtual address will be used on top of the remaining bits as an offset
+; into this huge page rather than as an index into a level 1 table
+    mov ecx, 0 ;counter
+.loop:  ; filling up all 512 entries of the level 2 table, each entry is 2 megabytes each that will be total 1gigabyte
+
+    mov eax, 0x20000000 ; storing number of 2MiB
+    mul ecx ; multiplying value in eax by our counter to get address for our next page
+    or eax, 0b10000011  ; enabling present, writable and huge page flags
+    mov [page_table_l2 + ecx * 8], eax ; puting entry in the L2 table with the offset
+
+    inc ecx ; increment counter
+    cmp ecx, 512 ; checks if the whole table is mapped
+    jne .loop ; if not, continue
+
+    ret
+
+enable_paging:
+    ; pass page table location to cpu (to cr3 register)
+    mov eax, page_table_L4
+    mov cr3, eax
+
+    ; enable physical address extension that is necessary for 64-bit paging by enableing PAE flag
+    mov eax, cr4
+    or eax, 1 << 5
+    mov cr4, eax
+
+    ; enable long mode
+    mov ecx, 0xC0000080 ; argument for rdmsr
+    rdmsr               ; read model specific register instruction that loads efer register into eax register
+    or eax, 1 << 8      ; enabling long mode flag
+    wrmsr               ; write back modified efer register
+
+    ; enable paging by setting paging flag from cr0 register
+    mov eax, cr0
+    or eax, 1 << 31
+    mov cr0, eax
+
+    ret
+
 error:
     ; print error code
     mov dword [0xb8000], 0x4f524f45
@@ -70,7 +131,16 @@ error:
     mov byte  [0xb800a], al
     hlt
 
+; sekcja zadeklarowanych zmiennych
 section .bss
+align 4096          ; align all the tables to four kilobytes
+; paging tables
+page_table_L4:
+    resb 4096
+page_table_L3:
+    resb 4096
+page_table_L2:
+    resb 4096
 stack_bottom:
     resb 4096 * 4   ; reserving 512 bytes for our stack
 stack_top:
