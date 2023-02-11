@@ -6,7 +6,7 @@ Architecture: x86
 Bootloader: multiboot2
 
 
-Technologies used for emulating:
+Technologies used for creating environment and emulating os:
 
 - Docker
 
