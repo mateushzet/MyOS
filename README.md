@@ -1,7 +1,7 @@
 # MyOS
-My 64-bit Operating System Kernel,
+My 64-bit Operating System Kernel
 
-Architecture: x86,
+Architecture: x86
 
 Bootloader: multiboot2
 
