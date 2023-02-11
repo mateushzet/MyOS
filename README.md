@@ -15,10 +15,10 @@ Technologies used for creating environment and emulating os:
 
 Technologies installed in Docker container:
 
-- nasm
 - grub
 - xorriso
-- gcc cross compiler - "gcc-cross-x86_64-elf"
+- nasm (to build asm object files)
+- gcc cross compiler - "gcc-cross-x86_64-elf" (to build c object files)
 
 
 Process of emulating and launching os:
