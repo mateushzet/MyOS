@@ -1,3 +1,4 @@
+/* linker and grub configurations */
 ENTRY(start)
 
 SECTIONS

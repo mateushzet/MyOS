@@ -1,3 +1,4 @@
+#Preparing virtual linux machine with all the tools needed
 FROM randomdude/gcc-cross-x86_64-elf
 
 RUN apt-get update

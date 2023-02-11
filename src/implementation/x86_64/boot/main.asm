@@ -72,5 +72,5 @@ error:
 
 section .bss
 stack_bottom:
-    resb 4096 * 4
+    resb 4096 * 4   ; reserving 512 bytes for our stack
 stack_top:
