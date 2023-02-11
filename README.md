@@ -1,19 +1,19 @@
 # MyOS
-<h1>My 64-bit Operating System Kernel</h1?
+<h1>My 64-bit Operating System Kernel</h1>
 
 Architecture: x86
 
 Bootloader: multiboot2
 
 
-Technologies used for creating environment and emulating os:
+<h2>Technologies used for creating environment and emulating os:</h2>
 
 - Docker
 
 - Qemu
 
 
-Technologies installed in Docker container:
+<h2>Technologies installed in Docker container:</h2>
 
 - grub
 - xorriso
@@ -21,7 +21,7 @@ Technologies installed in Docker container:
 - gcc cross compiler - "gcc-cross-x86_64-elf" (to build c object files)
 
 
-Process of emulating and launching os:
+<h1>Process of emulating and launching os:</h1>
 1) Building containter image with docker - "docker build buildenv -t myos-buildenv"
 2) Makeing instance of previous iamge - "docker run --rm -it -v ${PWD}:/root/env myos-buildenv"
 3) Inside docker container generate the kernel.iso file by command "make build-x86_64"
