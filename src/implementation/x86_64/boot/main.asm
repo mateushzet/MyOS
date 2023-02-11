@@ -1,7 +1,7 @@
 global start
 extern long_mode_start
 
-section .text
+section .text ; code section
 bits 32
 start:
      mov esp, stack_top ; store the address of the top of the stack in stack pointer register (there are currently no frames on the stack)
@@ -22,7 +22,6 @@ start:
     ; loading code segment into the code selector to finish everything off
     jmp gdt64.code_segment:long_mode_start  ; specyfing code segment offset, cpu will jump to 64bit asm code
 
-    mov dword[0xb8000], 0x2f4b2f4f  ; writing into video memory cpu will display this on the screen
     hlt ; halt the cpu
 
 check_multiboot:
@@ -79,15 +78,15 @@ check_long_mode:
 ; since the cpu will now treat this as a virtual address we will map a chunk of these virtual addresses
 ; to the same physical addresses so our instructions will continue executing fluidly
 setup_page_tables:
-    mov eax, page_table_l3  ; getting address of page 3 table
+    mov eax, page_table_L3  ; getting address of page 3 table
     ; becouse of align 4096, first 12 bits of every entry is always going to be zero
     ; and the cpu uses these bits to store flags instead
     or eax, 0b11 ; enabling present and writable flags
-    mov [page_table_l4], eax    ; moving that address with setted flags into first entry of L4 table
+    mov [page_table_L4], eax    ; moving that address with setted flags into first entry of L4 table
 
-    mov eax, page_table_l2
+    mov eax, page_table_L2
     or eax, 0b11
-    mov [page_table_l3], eax
+    mov [page_table_L3], eax
 
 ; we dont need to create Level 1 table becouse of enableing the huge page flag on any entry in the level 2 table
 ; and this allow us to point directly to physical memmory and allocate a huge page that is two megabytes in size
@@ -99,7 +98,7 @@ setup_page_tables:
     mov eax, 0x20000000 ; storing number of 2MiB
     mul ecx ; multiplying value in eax by our counter to get address for our next page
     or eax, 0b10000011  ; enabling present, writable and huge page flags
-    mov [page_table_l2 + ecx * 8], eax ; puting entry in the L2 table with the offset
+    mov [page_table_L2 + ecx * 8], eax ; puting entry in the L2 table with the offset
 
     inc ecx ; increment counter
     cmp ecx, 512 ; checks if the whole table is mapped
