@@ -1,4 +1,5 @@
 global start
+extern long_mode_start
 
 section .text
 bits 32
@@ -15,6 +16,12 @@ start:
     call setup_page_tables
     call enable_paging
 
+    ; load the global descriptor table
+    lgdt [gdt64.pointer]    ; loading its pointer
+
+    ; loading code segment into the code selector to finish everything off
+    jmp gdt64.code_segment:long_mode_start  ; specyfing code segment offset, cpu will jump to 64bit asm code
+
     mov dword[0xb8000], 0x2f4b2f4f  ; writing into video memory cpu will display this on the screen
     hlt ; halt the cpu
 
@@ -22,7 +29,7 @@ check_multiboot:
     cmp eax, 0x36d76289  ; check if bootloader store magic number in eax register
     jne .no_multiboot   ; if not euqal jump to no_multiboot label
     ret                 ; else return into subrutine
-.no_multiboot           ;  handling no multi-boot problem
+.no_multiboot:          ;  handling no multi-boot problem
     mov al, "M"         ; puting error message into al register
     jmp error           ; displaying error
 
@@ -61,7 +68,7 @@ check_long_mode:
     jz .no_long_mode    ; if it is not set, cpu do not supports long mode
 
     ret
-.no_long_mode   ;  handling no long mode problem
+.no_long_mode:   ;  handling no long mode problem
     mov al, "L"
     jmp error
 
@@ -131,7 +138,7 @@ error:
     mov byte  [0xb800a], al
     hlt
 
-; sekcja zadeklarowanych zmiennych
+; reserve bytes section
 section .bss
 align 4096          ; align all the tables to four kilobytes
 ; paging tables
@@ -144,3 +151,16 @@ page_table_L2:
 stack_bottom:
     resb 4096 * 4   ; reserving 512 bytes for our stack
 stack_top:
+
+; read only data section
+section .rodata
+gdt64:   ; 64 bit global descriptor table
+    dq 0 ; zero entry
+.code_segment: equ $ - gdt64 ;offset
+    dq (1 << 43) | (1 << 44) | (1 << 47) | (1 << 53) ; executable flag, descriptor type, present flag, 64-bit flag
+; pointer to the global descriptor table
+.pointer:
+    ; it holds 2 bytes of the length of the table
+    ; difference between current memory addresswhich is the end of the table ($) minus the start of the table (gdt64)
+    dw $ - gdt64 - 1
+    dq gdt64    ; store pointer itself once again using the label
