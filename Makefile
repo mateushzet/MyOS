@@ -10,8 +10,8 @@ x86_64_asm_object_files := $(patsubst src/implementation/x86_64/%.asm, build/x86
 $(x86_64_asm_object_files): build/x86_64/%.o : src/implementation/x86_64/%.asm
 
 # making sure that a directory to holding our compiled file exists
-	mkdir -p $(dir $@) && \
 # using nasm to compile our assembly code
+	mkdir -p $(dir $@) && \
 	nasm -f elf64 $(patsubst build/x86_64/%.o, src/implementation/x86_64/%.asm, $@) -o $@
 
 # phony command which will link our object files into kernel.bin and generate iso file
