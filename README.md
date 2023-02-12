@@ -240,7 +240,7 @@ Bootloader: multiboot2
   </tr>
   <tr>
     <td>14</td>
-    <td>' ',</td>
+    <td>'\b',</td>
     <td>33</td>
     <td>'F',</td>
     <td>52</td>
