@@ -73,6 +73,11 @@ void print_char(char character) {
         return;
     }
 
+    if (character == '\b') {
+        backspace();
+        return;
+    }
+
     if (col >= NUM_COLS) {
         print_newline();
     }
