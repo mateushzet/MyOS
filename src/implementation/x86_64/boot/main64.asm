@@ -2,6 +2,9 @@ global long_mode_start
 extern kernel_main
 extern clear
 extern user_input
+extern single_input
+extern write_user
+extern odpowiedz
 
 section .text
 bits 64             ; setting bits to 64
@@ -16,6 +19,8 @@ long_mode_start:
 
     call clear
     call kernel_main
+    call input
+    call odpowiedz
     call user_input_loop
     hlt
 
@@ -48,6 +53,14 @@ long_mode_start:
         mov rdi, rax
         call user_input
         jmp user_input_loop
+
+    input:
+        call write_user
+        call get_char
+        mov rdi, rax
+        call single_input
+        ret
+
 
 section .data
     scancode db 0

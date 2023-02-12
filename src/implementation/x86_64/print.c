@@ -68,6 +68,8 @@ void print_newline() {
 void print_char(char character) {
     if (character == '\n') {
         print_newline();
+        print_char(" ");
+        backspace();
         return;
     }
 
