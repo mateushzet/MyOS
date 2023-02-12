@@ -1,6 +1,7 @@
 global long_mode_start
 extern kernel_main
 extern clear
+extern user_input
 
 section .text
 bits 64             ; setting bits to 64
@@ -14,7 +15,8 @@ long_mode_start:
     mov gs, ax
 
     call clear
-    call writeing_loop
+    call kernel_main
+    call user_input_loop
     hlt
 
     ; Read a scancode from the keyboard
@@ -41,11 +43,11 @@ long_mode_start:
         mov eax, [scancode]
         ret
 
-    writeing_loop:
+    user_input_loop:
         call get_char
         mov rdi, rax
-        call kernel_main
-        jmp writeing_loop
+        call user_input
+        jmp user_input_loop
 
 section .data
     scancode db 0

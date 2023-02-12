@@ -16,6 +16,19 @@ size_t row = 0;
 // first four bits represents foreground color and next four bits represents background color
 uint8_t color = PRINT_COLOR_WHITE | PRINT_COLOR_BLACK << 4;
 
+void backspace() {
+
+    if(col == 0){
+        col = NUM_COLS;
+        row --;
+    }
+    buffer[col - 1 + NUM_COLS * row] = (struct Char) {
+            character: ' ',
+            color: color,
+    };
+    col--;
+}
+
 void clear_row(size_t row) {
     struct Char empty = (struct Char) {
             character: ' ',
