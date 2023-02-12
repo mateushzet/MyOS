@@ -4,7 +4,7 @@ extern clear
 extern user_input
 extern single_input
 extern write_user
-extern odpowiedz
+extern answer
 
 section .text
 bits 64             ; setting bits to 64
@@ -20,7 +20,7 @@ long_mode_start:
     call clear
     call kernel_main
     call input
-    call odpowiedz
+    call answer
     call user_input_loop
     hlt
 

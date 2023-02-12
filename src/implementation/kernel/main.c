@@ -130,7 +130,6 @@ void single_input(uint64_t ascii){
     backspace();
 }
 
-
 void user_input(uint64_t ascii){
     uint8_t character = (uint8_t) ascii;
     char str[2] = "";
@@ -146,10 +145,10 @@ void user_input(uint64_t ascii){
 void kernel_main() {
     print_clear();
     print_set_color(PRINT_COLOR_YELLOW, PRINT_COLOR_BLACK);
-    print_str("Welcome to MyOS!\nMENU:\n1) option1\n2) option2\n3) option3\n");
+    print_str("Welcome to MyOS!\n\nMENU:\n1) files\n2) command list\n3) text editor\n4) terminal \n5) users \n 6) games");
 }
 
-void odpowiedz() {
+void answer() {
     print_set_color(PRINT_COLOR_YELLOW, PRINT_COLOR_BLACK);
     char str[14] = "user input =  ";
     str[13] = lastInput;
@@ -162,7 +161,6 @@ void write_user() {
     print_str("\n");
     print_str("USER: ");
 }
-
 
 void clear(){
 print_clear();
