@@ -1,5 +1,6 @@
 global long_mode_start
 extern kernel_main
+extern clear
 
 section .text
 bits 64             ; setting bits to 64
@@ -12,15 +13,16 @@ long_mode_start:
     mov fs, ax
     mov gs, ax
 
-    call kernel_main
+    call clear
     call writeing_loop
-
     hlt
 
     ; Read a scancode from the keyboard
     read_scancode:
         in al, 0x60 ; Read a scancode from the keyboard controller
         mov [scancode], al
+        shr al, 7
+        jnz read_scancode
         ret
 
     ; Wait for a key to be pressed
@@ -41,7 +43,8 @@ long_mode_start:
 
     writeing_loop:
         call get_char
-        mov dword[0xb8000], eax
+        mov rdi, rax
+        call kernel_main
         jmp writeing_loop
 
 section .data
