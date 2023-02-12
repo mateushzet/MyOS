@@ -1,6 +1,6 @@
 #include "print.h"
 #include <stdint.h>
-
+extern void input();
 char lastInput;
 
 char* kbd_US [128] =
@@ -118,8 +118,7 @@ char* kbd_US [128] =
                 ' ',
         };
 
-void single_input(uint64_t ascii){
-
+void handle_input(uint64_t ascii){
     uint8_t character = (uint8_t) ascii;
     char str[2] = "";
     str[0] = kbd_US[character];
@@ -130,22 +129,25 @@ void single_input(uint64_t ascii){
     backspace();
 }
 
-void user_input(uint64_t ascii){
-    uint8_t character = (uint8_t) ascii;
-    char str[2] = "";
-    if((character) == 14){
-        backspace();
-    }else{
-    str[0] = kbd_US[character];
-    print_set_color(PRINT_COLOR_BLACK, PRINT_COLOR_WHITE);
-    print_str(str);
-    }
-}
-
 void kernel_main() {
     print_clear();
     print_set_color(PRINT_COLOR_YELLOW, PRINT_COLOR_BLACK);
     print_str("Welcome to MyOS!\n\nMENU:\n1) files\n2) command list\n3) text editor\n4) terminal \n5) users \n 6) games");
+    input();
+    char str[14] = "user input =  ";
+    str[13] = lastInput;
+    print_str(str);
+    print_str("\n");
+    input();
+    str[14] = "user input =  ";
+    str[13] = lastInput;
+    print_str(str);
+    print_str("\n");
+    input();
+    str[14] = "user input =  ";
+    str[13] = lastInput;
+    print_str(str);
+    print_str("\n");
 }
 
 void answer() {
@@ -156,7 +158,7 @@ void answer() {
     print_str("\n");
 }
 
-void write_user() {
+void print_user() {
     print_set_color(PRINT_COLOR_YELLOW, PRINT_COLOR_BLACK);
     print_str("\n");
     print_str("USER: ");
@@ -165,4 +167,3 @@ void write_user() {
 void clear(){
 print_clear();
 }
-
