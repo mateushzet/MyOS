@@ -158,9 +158,7 @@ void clear(){
 print_clear();
 }
 
-void kernel_main() {
-    print_menu();
-}
+
 
 void ttt(){
     print_set_color(PRINT_COLOR_WHITE, PRINT_COLOR_BLACK);
@@ -175,7 +173,7 @@ void ttt(){
     int counter = 0;
     char letter_under_x;
     char txt[2] = " ";
-    txt[1] = '\0';
+    char winner[2] = " ";
     int notfinished = 1;
     while(notfinished){
         clear();
@@ -226,13 +224,47 @@ void ttt(){
             }
         }
         arr[y_of_x][x_of_x] = letter_under_x;
-        print_str("\n\nuse wasd to navigate\n");
-        print_str("press enter to set\n");
+
         if(counter == 9){
             notfinished = 0;
         }
+        for (int i = 0; i <= 3; ++i) {
+            if(arr[i][0] == arr[i][2] && arr[i][2] == arr[i][4] && arr[i][2] != ' ') {
+                notfinished = 0;
+                winner[0] = arr[i][0];
+            }
+        }
+            for (int i = 0; i <= 4; i+=2) {
+            if(arr[0][i] == arr[1][i] && arr[1][i] == arr[2][i] && arr[1][i] != ' ') {
+                notfinished = 0;
+                winner[0] = arr[0][i];
+            }
+        }
+
+        if(arr[0][0] == arr[1][2] && arr[1][2] == arr[2][4] && arr[1][2] != ' ') {
+            notfinished = 0;
+            winner[0] = arr[0][0];
+        }
+
+        if(arr[2][0] == arr[1][2] && arr[1][2] == arr[0][4] && arr[1][2] != ' ') {
+            notfinished = 0;
+            winner[0] = arr[0][4];
+        }
+
+
 
         if(notfinished){
+            print_str("\n\nit is ");
+            print_set_color(PRINT_COLOR_YELLOW, PRINT_COLOR_BLACK);
+            if(turn == 0 ){
+                print_str("X");
+            }else{
+                print_str("O");
+            }
+            print_set_color(PRINT_COLOR_WHITE, PRINT_COLOR_BLACK);
+            print_str(" turn\n");
+            print_str("use wasd to navigate\n");
+            print_str("press enter to set\n");
         input();
         switch (lastInput) {
             case 'A':
@@ -277,22 +309,30 @@ void ttt(){
 
 
     }
-    print_str("GAME OVER\n");
+    print_str("\n\nGAME OVER\n");
+    if(winner[0] != ' '){
+    if(turn == 0){
+        print_str("O wins!\n");
+    } else{
+        print_str("X wins!\n");
+    }} else  {
+        print_str("draw!\n");
+    }
 }
 
 void games(){
     print_str("You have selected Games.\n");
-    print_str("\nGAMES:\n1) tik tak toe\n2) exit\n");
+    print_str("\nGAMES:\n1) start\n2) exit\n");
     input();
     print_answear();
     print_set_color(PRINT_COLOR_RED, PRINT_COLOR_BLACK);
     switch (lastInput) {
         case '1':
-            print_str("tik tak toe\n");
-            ttt();
+            print_str("start\n");
+            ttt(1);
             break;
         case '2':
-            print_str("You have selected Command exit.\n");
+            print_str("exit\n");
             break;
         default:
             print_str("Invalid choice.\n");
@@ -301,33 +341,34 @@ void games(){
 }
 
 void print_menu() {
+    clear();
     print_set_color(PRINT_COLOR_GREEN, PRINT_COLOR_BLACK);
-    print_clear();
     print_str("Welcome to MyOS!\n\n");
     print_set_color(PRINT_COLOR_YELLOW, PRINT_COLOR_BLACK);
-    print_str("\nMENU:\n1) files\n2) command list\n3) text editor\n4) terminal \n5) users \n6) games\n");
+    print_str("\nMENU:\n1) command list\n2) text editor\n3) terminal \n4) tik tak toe\n");
     print_prompt();
     input();
     print_answear();
     while(1){
+        print_set_color(PRINT_COLOR_BLACK, PRINT_COLOR_BLACK);
+        clear();
         print_set_color(PRINT_COLOR_RED, PRINT_COLOR_BLACK);
     switch (lastInput) {
         case '1':
-            print_str("You have selected Files.\n");
+            print_str("You have selected command list.\n");
             break;
         case '2':
-            print_str("You have selected Command list.\n");
+            print_str("You have selected text editor.\n");
+            rint_str("press X to exit\n");
+            while(lastInput != 'X'){
+                input();
+                print_input();
+            }
             break;
         case '3':
-            print_str("You have selected Text editor.\n");
+            print_str("You have selected terminal.\n");
             break;
         case '4':
-            print_str("You have selected Terminal.\n");
-            break;
-        case '5':
-            print_str("You have selected Users.\n");
-            break;
-        case '6':
             games();
             break;
         default:
@@ -335,8 +376,11 @@ void print_menu() {
             break;
     }
     print_set_color(PRINT_COLOR_YELLOW, PRINT_COLOR_BLACK);
-    print_str("\nMENU:\n1) files\n2) command list\n3) text editor\n4) terminal \n5) users \n6) games\n");
+    print_str("\nMENU:\n1) command list\n2) text editor\n3) terminal \n4) tik tak toe\n");
     input();
     print_answear();
 }
+}
+void kernel_main() {
+    print_menu();
 }
