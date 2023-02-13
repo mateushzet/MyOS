@@ -3,7 +3,10 @@
 extern void input();
 extern void open();
 char lastInput;
-
+char* notes [1840];
+int notes_len = 0;
+int notes_rows = 0;
+int backspace_flag = 0;
 char* scan_code_map [128] =
         {
                 ' ',
@@ -122,12 +125,18 @@ char* scan_code_map [128] =
 void handle_input(uint64_t ascii){
     uint8_t character = (uint8_t) ascii;
     lastInput = scan_code_map[character];
+    if(character == 14){
+        backspace_flag = 1;
+    }
 }
 void print_input(){
     char str[2] = "";
     str[0] = lastInput;
     print_set_color(PRINT_COLOR_BLACK, PRINT_COLOR_WHITE);
     print_str(str);
+    if(backspace_flag == 1){
+        backspace_flag = 0;
+    }
 }
 void print_answear(){
     print_str("\n");
@@ -264,7 +273,7 @@ void ttt(){
             print_set_color(PRINT_COLOR_WHITE, PRINT_COLOR_BLACK);
             print_str(" turn\n");
             print_str("use wasd to navigate\n");
-            print_str("press enter to set\n");
+            print_str("press space or special key to set\n");
         input();
         switch (lastInput) {
             case 'A':
@@ -358,11 +367,23 @@ void print_menu() {
             print_str("You have selected command list.\n");
             break;
         case '2':
-            print_str("You have selected text editor.\n");
-            rint_str("press X to exit\n");
+            print_str("TEXT EDITOR (stored only in ram!):\n");
+            print_str("press X to exit\n");
+            for (int i = 0; i < notes_len; ++i) {
+                char temp[2] = " ";
+                temp[0] = notes[i];
+                print_str(temp);
+            }
             while(lastInput != 'X'){
                 input();
+                if(notes_rows<=21 || backspace_flag == 1 || get_row()<24){
+                notes[notes_len]=lastInput;
+                if(lastInput == '\n'){
+                    notes_rows++;
+                }
+                notes_len++;
                 print_input();
+                }
             }
             break;
         case '3':

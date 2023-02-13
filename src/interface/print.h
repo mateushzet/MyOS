@@ -21,7 +21,7 @@ enum{
     PRINT_COLOR_YELLOW = 14,
     PRINT_COLOR_WHITE = 15,
 };
-
+int get_row();
 void print_clear();
 void print_char(char character);
 void print_str(char* string);

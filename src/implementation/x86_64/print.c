@@ -15,9 +15,10 @@ size_t col = 0;
 size_t row = 0;
 // first four bits represents foreground color and next four bits represents background color
 uint8_t color = PRINT_COLOR_WHITE | PRINT_COLOR_BLACK << 4;
-
+int get_row(){
+   return row;
+}
 void backspace() {
-
     if(col == 0){
         col = NUM_COLS;
         row --;
