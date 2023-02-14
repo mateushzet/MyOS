@@ -313,3 +313,4 @@ Bootloader: multiboot2
 
 <h2>Example on a real device</h2>
 <img src =https://github.com/mateushzet/MyOS/blob/ec55c162626dba94c6611ca839cc2d8f793dd6b4/photo.jpg>
+The system includes a text editor that stores data in RAM, a command line with a few commands that provide character animations and customization of menu text color, and a Tic-Tac-Toe game.
