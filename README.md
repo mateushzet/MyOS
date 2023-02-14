@@ -311,5 +311,5 @@ Bootloader: multiboot2
 </tbody>
 </table>
 
-<h2>Example on a physical device</h2>
+<h2>Example on a real device</h2>
 <img src =https://github.com/mateushzet/MyOS/blob/ec55c162626dba94c6611ca839cc2d8f793dd6b4/photo.jpg>
