@@ -311,7 +311,5 @@ Bootloader: multiboot2
 </tbody>
 </table>
 
-
-
-
-
+<h2>Tests on a physical device</h2>
+![329401666_755076662464465_2707357758193483288_n](https://user-images.githubusercontent.com/72745420/218621575-c82c24f8-6dfe-4acf-bce9-06917fa6d8d9.jpg)
