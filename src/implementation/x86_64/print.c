@@ -18,6 +18,7 @@ uint8_t color = PRINT_COLOR_WHITE | PRINT_COLOR_BLACK << 4;
 int get_row(){
    return row;
 }
+
 void backspace() {
     if(col == 0){
         col = NUM_COLS;
@@ -35,7 +36,6 @@ void clear_row(size_t row) {
             character: ' ',
             color: color,
     };
-
     for (size_t col = 0; col < NUM_COLS; col++) {
         buffer[col + NUM_COLS * row] = empty;
     }
@@ -49,12 +49,10 @@ void print_clear() {
 
 void print_newline() {
     col = 0;
-
     if (row < NUM_ROWS - 1) {
         row++;
         return;
     }
-
 // we dont need to go by row = 0 becouse this row will  then be cut off the screen
     for (size_t row = 1; row < NUM_ROWS; row++) {
         for (size_t col = 0; col < NUM_COLS; col++) {
@@ -62,7 +60,6 @@ void print_newline() {
             buffer[col + NUM_COLS * (row - 1)] = character;
         }
     }
-
     clear_row(NUM_ROWS - 1);
 }
 
@@ -73,32 +70,26 @@ void print_char(char character) {
         backspace();
         return;
     }
-
     if (character == '\b') {
         backspace();
         return;
     }
-
     if (col >= NUM_COLS) {
         print_newline();
     }
-
     buffer[col + NUM_COLS * row] = (struct Char) {
             character: (uint8_t) character,
             color: color,
     };
-
     col++;
 }
 
 void print_str(char* str) {
     for (size_t i = 0; 1; i++) {
         char character = (uint8_t) str[i];
-
         if (character == '\0') {
             return;
         }
-
         print_char(character);
     }
 }

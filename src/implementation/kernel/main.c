@@ -6,6 +6,7 @@ char lastInput;
 char* notes [1840];
 int notes_len = 0;
 int notes_rows = 0;
+char* os_color = "PRINT_COLOR_YELLOW";
 int backspace_flag = 0;
 char* scan_code_map [128] =
         {
@@ -125,19 +126,21 @@ char* scan_code_map [128] =
 void handle_input(uint64_t ascii){
     uint8_t character = (uint8_t) ascii;
     lastInput = scan_code_map[character];
-    if(character == 14){
-        backspace_flag = 1;
-    }
+        if(character == 14){
+            backspace_flag = 1;
+        }
 }
+
 void print_input(){
     char str[2] = "";
     str[0] = lastInput;
     print_set_color(PRINT_COLOR_BLACK, PRINT_COLOR_WHITE);
     print_str(str);
-    if(backspace_flag == 1){
-        backspace_flag = 0;
-    }
+        if(backspace_flag == 1){
+            backspace_flag = 0;
+        }
 }
+
 void print_answear(){
     print_str("\n");
     print_set_color(PRINT_COLOR_WHITE, PRINT_COLOR_BLACK);
@@ -167,11 +170,8 @@ void clear(){
 print_clear();
 }
 
-
-
 void ttt(){
     print_set_color(PRINT_COLOR_WHITE, PRINT_COLOR_BLACK);
-
     char arr[3][5] = {
     {' ', '|', ' ', '|', ' ',},
     {' ', '|', ' ', '|', ' ',},
@@ -184,13 +184,11 @@ void ttt(){
     char txt[2] = " ";
     char winner[2] = " ";
     int notfinished = 1;
+
     while(notfinished){
         clear();
         letter_under_x = arr[y_of_x][x_of_x];
-
-
         for (int i = 0; i < 5; ++i) {
-
             txt[0] = arr[0][i];
             if (y_of_x == 0 && x_of_x == i) {
                 print_set_color(PRINT_COLOR_RED, PRINT_COLOR_BLACK);
@@ -233,7 +231,6 @@ void ttt(){
             }
         }
         arr[y_of_x][x_of_x] = letter_under_x;
-
         if(counter == 9){
             notfinished = 0;
         }
@@ -249,19 +246,14 @@ void ttt(){
                 winner[0] = arr[0][i];
             }
         }
-
         if(arr[0][0] == arr[1][2] && arr[1][2] == arr[2][4] && arr[1][2] != ' ') {
             notfinished = 0;
             winner[0] = arr[0][0];
         }
-
         if(arr[2][0] == arr[1][2] && arr[1][2] == arr[0][4] && arr[1][2] != ' ') {
             notfinished = 0;
             winner[0] = arr[0][4];
         }
-
-
-
         if(notfinished){
             print_str("\n\nit is ");
             print_set_color(PRINT_COLOR_YELLOW, PRINT_COLOR_BLACK);
@@ -307,16 +299,13 @@ void ttt(){
                         turn = 0;
                         counter++;
                     }
-
                 }
                 break;
             default:
                 print_str("Invalid choice.\n");
                 break;
-        }}
-
-
-
+        }
+    }
     }
     print_str("\n\nGAME OVER\n");
     if(winner[0] != ' '){
@@ -349,11 +338,73 @@ void games(){
     }
 }
 
+void animation(char* image){
+    int jumpControlAtBottom = 0;
+    const int someDelay = 6000;
+    int shifControl = 0;
+    for (jumpControlAtBottom = 0; jumpControlAtBottom < 30; ++jumpControlAtBottom)
+    {
+        print_str("\n");
+    }
+    print_str(image);
+    for (shifControl = 0; shifControl < 30; ++shifControl)
+    {
+        delay(someDelay);
+        print_str("\n");
+    }
+}
+
+const char rocket[] =
+        "           ^ \n\
+          /^\\\n\
+          |-|\n\
+          |M|\n\
+          |Y|\n\
+          | |\n\
+          |O|\n\
+          |S|\n\
+         /| |\\\n\
+        / | | \\\n\
+       |  | |  |\n\
+        `-\"\"\"-`\n\
+";
+
+const char smile[] =
+"                             .@@@@@                                     \n\
+                         *@@#                       %@@*                        \n\
+                    @@                                    ,@@                   \n\
+                @&                                             @@               \n\
+            ,@                                                    *@            \n\
+          @#                                                         @@         \n\
+        @            @@@@@@@@@@                  @@@@@@*               ,@       \n\
+      @.           @@@@@@@@@@@@@@             @@@@@@@@@@@@#              (@     \n\
+     @            @@@@@@@@@@@@@@@@           @@@@@@@@@@@@@@@               @    \n\
+   @,             @@@@@@@@@@@@@@@@           @@@@@@@@@@@@@@@                @/  \n\
+  @.               @@@@@@@@@@@@@@            @@@@@@@@@@@@@@.                 @  \n\
+  @                  @@@@@@@@@@                @@@@@@@@@@@                    @ \n\
+ @                                                /@@&                         @\n\
+ @                                                                             @\n\
+ @                                                                             @\n\
+ @                                                                             @\n\
+ @                                                                             @\n\
+ @.                                                                           @ \n\
+  @       @@                                                       @          @ \n\
+   @          @,                                                @&           @  \n\
+    @            @@                                          #@            .@   \n\
+     %@              @@                                    @              @     \n\
+       @.               /@/                             @(              #@      \n\
+         @/                 #@/                      @.               @@        \n\
+           *@                    @@.            .@@                 @           \n\
+              #@                        /////                    @.             \n\
+                  @@                                         @@                 \n\
+                       @@*                             /@@                      \n\
+                              #@@@@%%#     (%%@@@@,";
+
 void print_menu() {
     clear();
     print_set_color(PRINT_COLOR_GREEN, PRINT_COLOR_BLACK);
     print_str("Welcome to MyOS!\n\n");
-    print_set_color(PRINT_COLOR_YELLOW, PRINT_COLOR_BLACK);
+    print_set_color(PRINT_COLOR_YELLOW, os_color);
     print_str("\nMENU:\n1) command list\n2) text editor\n3) terminal \n4) tik tak toe\n");
     print_prompt();
     input();
@@ -365,6 +416,11 @@ void print_menu() {
     switch (lastInput) {
         case '1':
             print_str("You have selected command list.\n");
+            print_str("/red - change menu color\n");
+            print_str("/yel - change menu color\n");
+            print_str("/blu - change menu color\n");
+            print_str("/rck - start animation\n");
+            print_str("/sml - start animation\n");
             break;
         case '2':
             print_str("TEXT EDITOR (stored only in ram!):\n");
@@ -385,9 +441,40 @@ void print_menu() {
                 print_input();
                 }
             }
+            backspace();
+            notes[notes_len] = ' ';
+            notes_len--;
             break;
         case '3':
-            print_str("You have selected terminal.\n");
+            print_str("TERMINAL, type /ext to leave.\n");
+            char command [4];
+            while(!(command[0] == '/' && command[1] == 'E' && command[2] == 'X' && command[3] == 'T')){
+            input();
+                char ans[2] = " ";
+            if(lastInput == '\b'){
+                command[3] = lastInput;
+                ans[0] = command[3];
+                command[3] = command[2];
+                command[2] = command[1];
+                command[1] = command[0];
+                command[0] = ' ';
+            }else{
+            command[0] = command[1];
+            command[1] = command[2];
+            command[2] = command[3];
+            command[3] = lastInput;
+            ans[0] = command[3];}
+            print_str(ans);
+                if(command[0] == '/' && command[1] == 'R' && command[2] == 'E' && command[3] == 'D'){os_color = "PRINT_COLOR_RED";}
+                if(command[0] == '/' && command[1] == 'G' && command[2] == 'R' && command[3] == 'E'){os_color = "PRINT_COLOR_GREEN";}
+                if(command[0] == '/' && command[1] == 'B' && command[2] == 'L' && command[3] == 'U'){os_color = "PRINT_COLOR_BLUE";}
+                if(command[0] == '/' && command[1] == 'R' && command[2] == 'C' && command[3] == 'K'){ animation(rocket); print_str("TERMINAL, type /ext to leave.\n");}
+                if(command[0] == '/' && command[1] == 'S' && command[2] == 'M' && command[3] == 'L'){ animation(smile); print_str("TERMINAL, type /ext to leave.\n");}
+            }
+            command[0] = ' ';
+            command[1] = ' ';
+            command[2] = ' ';
+            command[3] = ' ';
             break;
         case '4':
             games();
@@ -396,32 +483,29 @@ void print_menu() {
             print_str("Invalid choice.\n");
             break;
     }
-    print_set_color(PRINT_COLOR_YELLOW, PRINT_COLOR_BLACK);
+    print_set_color(PRINT_COLOR_YELLOW, os_color);
     print_str("\nMENU:\n1) command list\n2) text editor\n3) terminal \n4) tik tak toe\n");
     input();
     print_answear();
 }
 }
-void kernel_main() {
-    //Giving some delay
-    void delay( unsigned int value)
+
+void delay( unsigned int value)
+{
+    unsigned int count1 =0;
+    unsigned int count2 = 0;
+
+    for(count1 = 0; count1 < value ; count1++ )
     {
-        unsigned int count1 =0;
-        unsigned int count2 = 0;
-
-        for(count1 = 0; count1 < value ; count1++ )
+        for(count2 = 0; count2 < count1 ; count2++ )
         {
-            for(count2 = 0; count2 < count1 ; count2++ )
-            {
 
-            }
         }
     }
+}
 
-
-// string to display Rocket
-    const char rocket[] =
-            "\
+const char logo[] =
+        "\
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\
 @@@@@@@@@@@@@@@@@@@@@@@@@@,                           ,@@@@@@@@@@@@@@@@@@@@@@@@@\n\
 @@@@@@@@@@@@@@@@@@@/                                         *@@@@@@@@@@@@@@@@@@\n\
@@ -445,48 +529,7 @@ void kernel_main() {
 @@@@@@@@@@@@@@@@@@@@@@@@@@.                           .@@@@@@@@@@@@@@@@@@@@@@@@@\
 ";
 
-    const char rocket2[] =
-            "           ^ \n\
-          /^\\\n\
-          |-|\n\
-          |M|\n\
-          |Y|\n\
-          | |\n\
-          |O|\n\
-          |S|\n\
-         /| |\\\n\
-        / | | \\\n\
-       |  | |  |\n\
-        `-\"\"\"-`\n\
-";
-
-
-
-
-
-        int jumpControlAtBottom = 0;
-        const int someDelay = 6000;
-        int shifControl = 0;
-
-
-        //jump to bottom of console
-
-        for (jumpControlAtBottom = 0; jumpControlAtBottom < 30; ++jumpControlAtBottom)
-        {
-            print_str("\n");
-        }
-
-        //Print rocket
-    print_str(rocket);
-
-        for (shifControl = 0; shifControl < 30; ++shifControl)
-        {
-            // Rocket move on the basis of delay
-            delay(someDelay);
-            delay(someDelay);
-            // move rocket a line upward
-            print_str("\n");
-        }
-
+void kernel_main() {
+    animation(logo);
     print_menu();
 }
