@@ -1,7 +1,6 @@
 # MyOS
+<small>I did the basics with this tutorial https://youtu.be/wz9CZBeXR6U, the input handling and system functionalities were done by myself.</small>
 <h1>My 64-bit Operating System Kernel</h1>
-
-I did the basics with this tutorial https://youtu.be/wz9CZBeXR6U, the input handling and system functionalities were done by myself.
 
 Architecture: x86
 
